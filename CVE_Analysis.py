@@ -12,14 +12,15 @@ dataSet = pd.read_csv('CVE_Cleaned.csv',
                       error_bad_lines=False,
                       delimiter=';', decimal = ',')
 
-# Number of CVEs discovered by year
 
+# Number of CVEs discovered by year
 discYear = dataSet['discoveredYear']
 plt.title('Number of CVEs discovered by year')
 plt.xlabel('Discovered Year')
 plt.ylabel('Count')
-discYear.value_counts().plot(kind='bar', 
-    color='b', figsize=[10,10]).invert_xaxis()
+discYear.value_counts().plot(kind='bar',
+                     color='b',
+                     figsize=[10,10]).invert_xaxis()
 plt.show()
 
 
@@ -29,7 +30,7 @@ numProduct = dataSet.groupby('discoveredYear')['product_name'].nunique()
 plt.title('Number of products discovered by year')
 plt.xlabel('Discovered Year')
 plt.ylabel('Number of Products')
-numProduct.plot(kind='line', figsize=[10,10])
+numProduct.plot(kind='line',figsize=[10,10])
 plt.show()
 
 
@@ -39,7 +40,7 @@ countVendor = dataSet['vendor_name'].value_counts()
 plt.title('Top 15 CVEs found by Vendor')
 plt.xlabel('Count')
 plt.ylabel('Vendor Name')
-countVendor.head(15).plot(kind='barh', figsize=[10,10]).invert_yaxis()
+countVendor.head(15).plot(kind='barh',figsize=[10,10]).invert_yaxis()
 plt.show()
 
 
@@ -47,24 +48,24 @@ plt.show()
 
 selectedOS = dataSet[dataSet.product_name.isin(['windows_10','iphone_os','linux_kernel','android','mac_os_x'])]
 plt.title('Top 5 OSs Comparison')
-selectedOS['product_name'].value_counts().plot(kind='pie', figsize=[10,10])
+selectedOS['product_name'].value_counts().plot(kind='pie',figsize=[10,10],autopct='%.2f')
 plt.show()
 
 
 # CVEs Found by Year
 
 cveDescCount = dataSet.groupby('discoveredYear')['CWE_Description'].value_counts().unstack().fillna(0)
-cveDescCount.tail(10).plot(kind='line', figsize=[10,10],legend=None)
 plt.title('Top CVEs found by Year')
 plt.xlabel('Discovered Year')
 plt.ylabel('Number of CVEs Found')
+cveDescCount.tail(10).plot(kind='line',figsize=[10,10],legend=None)
 plt.show()
 
 
 # Exploitability Vs. Impact Score by year 
 
-avgExploitScr = (dataSet.groupby('discoveredYear')['V2_exploitabilityScore'].sum())/dataSet.groupby('discoveredYear')['V2_exploitabilityScore'].count()
-avgImpactScr = (dataSet.groupby('discoveredYear')['V2_impactScore'].sum())/dataSet.groupby('discoveredYear')['V2_impactScore'].count()
+avgExploitScr = dataSet.groupby('discoveredYear')['V2_exploitabilityScore'].mean()
+avgImpactScr = dataSet.groupby('discoveredYear')['V2_impactScore'].mean()
 plt.figure(figsize= (10, 10))
 plt.title('Exploitability Vs. Impact Score by year')
 plt.xlabel('Discovered Year')
@@ -77,18 +78,14 @@ plt.show()
 
 # Average Base Score by Year
 
-sumBaseScr = dataSet.groupby('discoveredYear')['V2_baseScore'].sum()
-numBaseScr = dataSet.groupby('discoveredYear')['V2_baseScore'].count()
-avgBaseScr = sumBaseScr/numBaseScr
-avgTotal = sumBaseScr.sum()/numBaseScr.sum()
+avgBaseScr = dataSet.groupby('discoveredYear')['V2_baseScore'].mean()
+avgBaseScrTotal = dataSet['V2_baseScore'].mean()
 plt.figure(figsize= (10, 10))
 plt.title('Average Base Score by year')
 plt.xlabel('Discovered Year')
 plt.ylabel('Avg Base Score')
 plt.plot(avgBaseScr)
-plt.axhline(y=avgTotal, color='green', linestyle='--')
-#plt.plot(avgTotal,color='green',linestyle='--')
-#plt.legend()
+plt.axhline(y=avgBaseScrTotal, color='green', linestyle='--')
 plt.show()
 
 
@@ -98,12 +95,14 @@ selectedVendor = dataSet[dataSet.vendor_name.isin(['microsoft','apple','google',
 #y = (selectedOS2['product_name'].value_counts()*100)/selectedOS2['product_name'].value_counts().sum()
 
 
+# correlation Exploitability & Impact Score
+
+#X = dataSet[['V2_exploitabilityScore', 'V2_impactScore']].astype(np.float)
 #
-X = dataSet[['V2_exploitabilityScore', 'V2_impactScore']].astype(np.float)
-
-y = dataSet['V2_impactScore'].astype(np.float)
-
-pd.scatter_matrix(X, alpha = 0.3, figsize = (10,10), diagonal = 'kde')
+#y = dataSet['V2_impactScore'].astype(np.float)
+#
+#pd.plotting.scatter_matrix(X, alpha = 0.5, figsize = (10,10), diagonal = 'kde',marker = 'o')
+#plt.show()
 
 
 
