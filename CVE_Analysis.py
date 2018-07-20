@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Gruppe: Mikael Etmanski, Paul Pacharra, Ruslan Rustchev und Metawee Langka
+# Datensatz Quelle: https://nvd.nist.gov/
 
 import numpy as np
 import pandas as pd
@@ -136,39 +138,30 @@ plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 plt.show()
 
 
+""" ---- Einfache Korrelation Exploitability & Impact Score ---- """
 
-""" ---- correlation Exploitability & Impact Score ---- """
+X_corr = dataSet[['V2_exploitabilityScore', 'V2_impactScore']].astype(np.float)
+pd.plotting.scatter_matrix(X_corr, alpha = 0.5, figsize = (10,10), diagonal = 'kde',marker = 'o')
+plt.title('correlation Exploitability & Impact Score',{'size':20, 'family':'monospace','x':0,'y':2.05})
+plt.show()
+print(X_corr.corr())
 
-X = dataSet[['V2_exploitabilityScore', 'V2_impactScore']].astype(np.float)
 
-y = dataSet['V2_impactScore'].astype(np.float)
-
-pd.plotting.scatter_matrix(X, alpha = 0.5, figsize = (10,10), diagonal = 'kde',marker = 'o')
-plt.title('correlation Exploitability & Impact Score',{'size':20, 'family':'monospace'})
+""" ----  Lineare Regression exploitability Score/base Score ---- """
+plt.figure(figsize=(10,10))
+sns.regplot('V2_exploitabilityScore', 'V2_baseScore', data=dataSet, color="r")
+plt.title('Lineare Regression exploitability Score/base Score',{'size':20, 'family':'monospace'})
+plt.xlabel('Exploitability Score')
+plt.ylabel('Impact Score')
 plt.show()
 
 
-# test
+""" ----  Pair plot matrix exploitability Score/base Score/impact Score ---- """
 
-#X = dataSet[['V2_exploitabilityScore']].astype(np.float)
-#y = dataSet[['V2_impactScore']].astype(np.float)
-#
-#from sklearn.model_selection import train_test_split
-#X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.3)
-#
-#from sklearn.linear_model import LinearRegression
-#
-#lr = LinearRegression()
-#
-##lr.fit(X_train, y_train)
-#
-#plt.figure(figsize= (10, 10))
-#plt.scatter(y_train, X_train, color = 'blue',alpha=0.5)
-#plt.scatter(y_test, X_test, color = 'green',alpha=0.5)
-#plt.show()
-
-
-
+XYZ= dataSet[['V2_exploitabilityScore', 'V2_baseScore', 'V2_impactScore']].astype(np.float)
+sns.pairplot(XYZ, diag_kind='kde', plot_kws={'alpha': 0.2})
+plt.title('Pair plot matrix exploitability/base/impact Score',{'size':20, 'family':'monospace','x':0,'y':2.25})
+plt.show()
 
 
 
