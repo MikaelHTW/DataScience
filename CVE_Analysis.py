@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Gruppe: Mikael Etmanski, Paul Pacharra, Ruslan Rustchev und Metawee Langka
+# Datensatz Quelle: https://nvd.nist.gov/
 
 import numpy as np
 import pandas as pd
@@ -131,35 +133,23 @@ plt.show()
 
 
 
-""" ---- correlation Exploitability & Impact Score ---- """
+""" ---- Einfache Korrelation Exploitability & Impact Score ---- """
 
-X = dataSet[['V2_exploitabilityScore', 'V2_impactScore']].astype(np.float)
-
-y = dataSet['V2_impactScore'].astype(np.float)
-
-pd.plotting.scatter_matrix(X, alpha = 0.5, figsize = (10,10), diagonal = 'kde',marker = 'o')
+X_corr = dataSet[['V2_exploitabilityScore', 'V2_impactScore']].astype(np.float)
+pd.plotting.scatter_matrix(X_corr, alpha = 0.5, figsize = (10,10), diagonal = 'kde',marker = 'o')
 plt.title('correlation Exploitability & Impact Score',{'size':20, 'family':'monospace'})
 plt.show()
+print(X_corr.corr())
+
+""" ----  Lineare Regression exploitability Score/base Score ---- """
+
+sns.regplot('V2_exploitabilityScore', 'V2_baseScore', data=dataSet, color="r")
 
 
-# test
+""" ----  Pair plot matrix exploitability Score/base Score/impact Score ---- """
 
-#X = dataSet[['V2_exploitabilityScore']]
-#y = dataSet['discoveredYear']
-#
-#from sklearn.model_selection import train_test_split
-#X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.01)
-#
-#from sklearn.linear_model import LinearRegression
-#
-#lr = LinearRegression()
-#
-##lr.fit(X_train, y_train)
-#
-#plt.figure(figsize= (10, 10))
-#plt.scatter(y_train, X_train, color = 'blue',alpha=0.5)
-#plt.scatter(y_test, X_test, color = 'green',alpha=0.5)
-#plt.show()
+XYZ= dataSet[['V2_exploitabilityScore', 'V2_baseScore', 'V2_impactScore']].astype(np.float)
+sns.pairplot(XYZ, diag_kind='kde', plot_kws={'alpha': 0.2})
 
 
 
