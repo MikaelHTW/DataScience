@@ -56,11 +56,17 @@ plt.show()
 """ ---- Top CVEs Found by Year ---- """
 
 cveDescCount = dataSet.groupby('discoveredYear')['CWE_Description'].value_counts().unstack().fillna(0)
-cveDescCount.ix['Other':'Authentication Issues':'Buffer Errors'].plot(kind='line',figsize=[10,10],legend=None)
+cveDescCount[['Authentication Issues','Buffer Errors',
+              'Cross-Site Request Forgery (CSRF)','Cross-Site Scripting (XSS)',
+              'Cryptographic Issues','Improper Access Control',
+              'Information Leak / Disclosure','Input Validation',
+              'Insufficient Information','Numeric Errors',
+              'Path Traversal','Permissions, Privileges, and Access Control',
+              'Resource Management Errors','SQL Injection']].tail(17).plot(kind='line',figsize=[10,10],legend=None)
 plt.title('Top CVEs found by Year',{'size':20, 'family':'monospace'})
 plt.xlabel('Discovered Year')
 plt.ylabel('Number of CVEs Found')
-#plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 plt.show()
 
 
@@ -144,22 +150,22 @@ plt.show()
 
 # test
 
-X = dataSet[['V2_exploitabilityScore']].astype(np.float)
-y = dataSet[['V2_impactScore']].astype(np.float)
-
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.3)
-
-from sklearn.linear_model import LinearRegression
-
-lr = LinearRegression()
-
-#lr.fit(X_train, y_train)
-
-plt.figure(figsize= (10, 10))
-plt.scatter(y_train, X_train, color = 'blue',alpha=0.5)
-plt.scatter(y_test, X_test, color = 'green',alpha=0.5)
-plt.show()
+#X = dataSet[['V2_exploitabilityScore']].astype(np.float)
+#y = dataSet[['V2_impactScore']].astype(np.float)
+#
+#from sklearn.model_selection import train_test_split
+#X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.3)
+#
+#from sklearn.linear_model import LinearRegression
+#
+#lr = LinearRegression()
+#
+##lr.fit(X_train, y_train)
+#
+#plt.figure(figsize= (10, 10))
+#plt.scatter(y_train, X_train, color = 'blue',alpha=0.5)
+#plt.scatter(y_test, X_test, color = 'green',alpha=0.5)
+#plt.show()
 
 
 
